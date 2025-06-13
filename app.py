@@ -1,6 +1,6 @@
 # app.py
 import streamlit as st
-from ragflow_client import RagflowClient
+from ragflow_agent_client import RagflowAgentClient # Correção aqui
 
 # --- Configuração da Página ---
 st.set_page_config(
@@ -16,7 +16,7 @@ st.write("Converse com o assistente oficial para encontrar informações sobre d
 # --- Inicialização do Cliente ---
 @st.cache_resource
 def get_ragflow_client():
-    return RagflowClient()
+    return RagflowAgentClient()
 
 client = get_ragflow_client()
 
@@ -37,7 +37,6 @@ if prompt := st.chat_input("Qual o tema da disciplina que você procura?"):
 
     with st.chat_message("assistant"):
         with st.spinner("Analisando na base de conhecimento..."):
-            # A chamada ao cliente agora é mais simples, sem passar o chat_id
             response = client.get_completion(prompt)
             st.markdown(response)
     

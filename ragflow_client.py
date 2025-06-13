@@ -2,7 +2,7 @@
 import requests
 import uuid
 import json
-from config import RAGFLOW_API_KEY, RAGFLOW_BASE_URL, RAGFLOW_DIALOGUE_ID
+from config import RAGFLOW_API_KEY, RAGFLOW_BASE_URL, RAGFLOW_AGENT_ID
 
 class RagflowClient:
     """
@@ -11,7 +11,7 @@ class RagflowClient:
     def __init__(self):
         self.base_url = RAGFLOW_BASE_URL
         self.token = RAGFLOW_API_KEY
-        self.dialogue_id = RAGFLOW_DIALOGUE_ID
+        self.dialogue_id = RAGFLOW_AGENT_ID
         self.headers = {
             # CORREÇÃO 1: Adicionado o prefixo "Bearer " para corrigir o erro 401 Unauthorized.
             "Authorization": f"Bearer {self.token}",
