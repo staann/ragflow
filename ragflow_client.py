@@ -13,7 +13,8 @@ class RagflowClient:
         self.token = RAGFLOW_API_KEY
         self.dialogue_id = RAGFLOW_DIALOGUE_ID
         self.headers = {
-            "Authorization": self.token, # Autenticação correta, sem "Bearer"
+            # CORREÇÃO 1: Adicionado o prefixo "Bearer " para corrigir o erro 401 Unauthorized.
+            "Authorization": f"Bearer {self.token}",
             "Content-Type": "application/json"
         }
         self.endpoint_url = f"{self.base_url}/v1/canvas/completion"
@@ -24,7 +25,8 @@ class RagflowClient:
         """
         payload = {
             "id": self.dialogue_id,
-            "message": user_query,
+            # CORREÇÃO 2: A chave foi alterada de "message" para "materia" para corresponder ao canvas.
+            "materia": user_query,
             "message_id": str(uuid.uuid4()),
             "running_hint_text": "is running...🕞"
         }
@@ -39,18 +41,16 @@ class RagflowClient:
                 for line in response.iter_lines():
                     if line:
                         decoded_line = line.decode('utf-8')
-                        raw_chunks_for_debug.append(decoded_line) # Guarda o chunk para depuração
+                        raw_chunks_for_debug.append(decoded_line)
 
                         if decoded_line.startswith("data:"):
                             json_str = decoded_line[len("data: "):]
                             if json_str.strip() and json_str.strip() != "[DONE]":
                                 try:
                                     json_data = json.loads(json_str)
-                                    # Se a resposta for um erro do servidor, mostre-o
                                     if json_data.get("code") == 500 and "message" in json_data:
                                         return f"Ocorreu um erro no servidor Ragflow: {json_data['message']}"
 
-                                    # Tenta extrair a resposta de campos comuns
                                     if "message" in json_data and isinstance(json_data["message"], str):
                                         final_answer += json_data["message"]
                                     elif "answer" in json_data and isinstance(json_data["answer"], str):
@@ -59,10 +59,9 @@ class RagflowClient:
                                         final_answer += json_data["content"]
                                         
                                 except json.JSONDecodeError:
-                                    pass # Ignora linhas que não são JSON válido
+                                    pass
 
                 if not final_answer.strip():
-                    # Se não encontrou a resposta, mostra os dados brutos para análise
                     return (f"--- DEBUG FINAL ---\n"
                             f"Conexão bem-sucedida, mas não foi possível extrair a resposta.\n"
                             f"Chunks brutos recebidos do servidor:\n\n" + "\n".join(raw_chunks_for_debug))
