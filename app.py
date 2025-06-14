@@ -1,19 +1,29 @@
 import streamlit as st
 from ragflow_agent_client import RagflowClient
+import unicodedata
 from visualizaJson import processar_json_disciplinas
 #from agent_api.config import AGENT_EXPLANATOR_ID
 
+def remover_acentos_nativo(texto):
+    # Normaliza para o formato NFD, que separa o caractere do acento
+    texto_normalizado = unicodedata.normalize('NFD', texto)
+    # Remove os caracteres de combinação (os acentos)
+    texto_sem_acento = "".join(c for c in texto_normalizado if not unicodedata.combining(c))
+    return texto_sem_acento
+
+
 st.set_page_config(page_title="Assistente de Turmas UnB", layout="centered")
 st.title("📚 Assistente de Turmas da UnB")
-with st.expander("Ver instruções de uso"):
+with st.expander("Instruções de Uso", expanded=True):
     st.markdown("""
-    - **VÁ DIRETO AO PONTO:** DIGITE APENAS O CONCEITO/TEMA DE ESTUDO.
-    - **EVITE CONVERSA:** NÃO USE "OI", "OLÁ", "POR FAVOR", ETC.
-    - **NÃO DEU CERTO?** TENTE PALAVRAS-CHAVE DIFERENTES OU SINÔNIMOS.
+        - **VÁ DIRETO AO PONTO:** DIGITE APENAS O CONCEITO/TEMA DE ESTUDO.
+        - **EVITE CONVERSA:** NÃO USE "OI", "OLÁ", "POR FAVOR", ETC.
+        - **NÃO DEU CERTO?** TENTE PALAVRAS-CHAVE DIFERENTES OU SINÔNIMOS.
     
-    **Exemplo:** `FÍSICA QUÂNTICA`, `REDES NEURAIS`, `HISTOLOGIA` , `SISTEMA DIGESTIVO` , `LATIM`
+        **Exemplo:** `FÍSICA QUÂNTICA` , `REDES NEURAIS`,  `HISTOLOGIA`
     """)
 materia = st.text_area("Digite o conteudo:", height=300)
+materia = remover_acentos_nativo(materia)
 materia = materia.upper()
 #Printando MATERIA DIGITADA
 print(f'materia digitada : {materia}')
