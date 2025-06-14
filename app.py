@@ -5,10 +5,16 @@ from visualizaJson import processar_json_disciplinas
 
 st.set_page_config(page_title="Assistente de Turmas UnB", layout="centered")
 st.title("📚 Assistente de Turmas da UnB")
-st.header("One", divider=True)
-st.subheader("Two", divider=True)
-st.markdown("*Streamlit* is **really** ***cool***.")
+with st.expander("Ver instruções de uso"):
+    st.markdown("""
+    - **VÁ DIRETO AO PONTO:** DIGITE APENAS O CONCEITO/TEMA DE ESTUDO.
+    - **EVITE CONVERSA:** NÃO USE "OI", "OLÁ", "POR FAVOR", ETC.
+    - **NÃO DEU CERTO?** TENTE PALAVRAS-CHAVE DIFERENTES OU SINÔNIMOS.
+    
+    **Exemplo:** `FÍSICA QUÂNTICA`, `REDES NEURAIS`, `HISTOLOGIA` , `SISTEMA DIGESTIVO` , `LATIM`
+    """)
 materia = st.text_area("Digite o conteudo:", height=300)
+materia = materia.upper()
 #Printando MATERIA DIGITADA
 print(f'materia digitada : {materia}')
 
