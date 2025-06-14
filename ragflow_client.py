@@ -17,7 +17,7 @@ class RagflowClient:
             "Authorization": f"Bearer {self.token}",
             "Content-Type": "application/json"
         }
-        self.endpoint_url = f"{self.base_url}/v1/canvas/completion"
+        self.endpoint_url = f"{self.base_url}api/v1/agents/{RAGFLOW_AGENT_ID}/completions"
 
     def get_completion(self, user_query: str):
         """
