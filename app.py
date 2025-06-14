@@ -1,43 +1,48 @@
-# app.py
 import streamlit as st
-from ragflow_agent_client import RagflowAgentClient # Correção aqui
+from ragflow_agent_client import RagflowClient
+from visualizaJson import processar_json_disciplinas
+#from agent_api.config import AGENT_EXPLANATOR_ID
 
-# --- Configuração da Página ---
-st.set_page_config(
-    page_title="Assistente de Turmas UnB",
-    page_icon="📚",
-    layout="centered"
-)
-
-# --- Título e Descrição ---
+st.set_page_config(page_title="Assistente de Turmas UnB", layout="centered")
 st.title("📚 Assistente de Turmas da UnB")
-st.write("Converse com o assistente oficial para encontrar informações sobre disciplinas.")
+st.header("One", divider=True)
+st.subheader("Two", divider=True)
+st.markdown("*Streamlit* is **really** ***cool***.")
+materia = st.text_area("Digite o conteudo:", height=300)
+#Printando MATERIA DIGITADA
+print(f'materia digitada : {materia}')
 
-# --- Inicialização do Cliente ---
-@st.cache_resource
-def get_ragflow_client():
-    return RagflowAgentClient()
+# Inicializa variáveis de estado
+if "resposta_agente" not in st.session_state:
+    st.session_state.resposta_agente = None
+#if "mostrar_detalhes" not in st.session_state:
+    #st.session_state.mostrar_detalhes = False
+#if "detalhes_agente" not in st.session_state:
+    #st.session_state.detalhes_agente = None
 
-client = get_ragflow_client()
+if st.button("Analisar"):
+    if not materia.strip():
+        st.warning("Por favor, cole uma matéria para análise.")
+    else:
+        with st.spinner("Analisando..."):
+            try:
+                client = RagflowClient()
+                session_id = client.start_session(materia)
+                result = client.analyze_materia(materia, session_id)
 
-# --- Gerenciamento do Histórico de Mensagens ---
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+                if result.get("code") == 0:
+                    #resposta = result["data"]["answer"]
+                    resposta = processar_json_disciplinas(result)
+                    #print(f'RESULT FORMATADO : {resposta}\n')
+                    st.session_state.resposta_agente = resposta
+                    print(f'Sessio State Resposta:  {st.session_state.resposta_agente}')
+                    #st.session_state.detalhes_agente = None  # Limpa caso nova análise
+                    #st.session_state.mostrar_detalhes = "FAKE" in resposta.upper()
 
-# Exibe o histórico da conversa
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+                    st.success("Resposta do agente:")
+                    st.write(resposta)
+                else:
+                    st.error(f"Erro da API: {result.get('message')}")
 
-# --- Input do Usuário ---
-if prompt := st.chat_input("Qual o tema da disciplina que você procura?"):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-
-    with st.chat_message("assistant"):
-        with st.spinner("Analisando na base de conhecimento..."):
-            response = client.get_completion(prompt)
-            st.markdown(response)
-    
-    st.session_state.messages.append({"role": "assistant", "content": response})
+            except Exception as e:
+                st.error(f"Erro ao conectar com o agente: {e}")

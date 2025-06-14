@@ -11,16 +11,16 @@ try:
         print(f"-> URL Base: {RAGFLOW_BASE_URL}")
         print(f"-> ID do Agente: {RAGFLOW_AGENT_ID}")
 
-    from ragflow_agent_client import RagflowAgentClient
+    from ragflow_agent_client import RagflowClient
     print("OK: Cliente de Agente Ragflow importado.")
 
-    client = RagflowAgentClient()
-    print(f"-> Enviando requisição para o endpoint: {client.endpoint_url}")
+    client = RagflowClient()
+    print(f"-> Enviando requisição para o endpoint:")
     
-    response = client.get_completion("Este é um teste de conexão.")
+    #response = client.get_completion("Este é um teste de conexão.")
 
     print("\n--- RESPOSTA RECEBIDA DO SERVIDOR ---")
-    print(response)
+    #print(response)
     print("-------------------------------------")
 
 except Exception as e:

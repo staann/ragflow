@@ -1,0 +1,216 @@
+{
+    "nodes": [
+        {
+            "data": {
+                "form": {
+                    "prologue": "INSTRUÇÕES DE USO:- Digite o conteúdo que deseja encontrar em LETRAS MAISCULAS, para um melhor resultado.- Digite apenas o conteúdo que deseja encontrar, evite palavras descessárias.- A Inteligência Artificial pode estar sucetivel a erros, se achar necessario, pesquise mais de 1 vez o conteúdo digitado.",
+                    "query": [
+                        {
+                            "key": "materia",
+                            "name": "materia",
+                            "optional": false,
+                            "type": "paragraph"
+                        }
+                    ]
+                },
+                "label": "Begin",
+                "name": "begin"
+            },
+            "dragging": false,
+            "id": "begin",
+            "measured": {
+                "height": 86,
+                "width": 200
+            },
+            "position": {
+                "x": -199.44442560927496,
+                "y": -375.05974111565325
+            },
+            "selected": false,
+            "sourcePosition": "left",
+            "targetPosition": "right",
+            "type": "beginNode"
+        },
+        {
+            "data": {
+                "form": {
+                    "empty_response": "SEM RESULTADOS.",
+                    "kb_ids": [
+                        "bc9edeec48a311f0b3b5fa761c0fa70c"
+                    ],
+                    "kb_vars": [],
+                    "keywords_similarity_weight": 0.55,
+                    "query": [
+                        {
+                            "component_id": "begin@materia",
+                            "type": "reference"
+                        }
+                    ],
+                    "similarity_threshold": 0.4,
+                    "top_n": 5,
+                    "use_kg": false
+                },
+                "label": "Retrieval",
+                "name": "Retrieval_0"
+            },
+            "dragging": false,
+            "id": "Retrieval:FortyMoonsPick",
+            "measured": {
+                "height": 106,
+                "width": 200
+            },
+            "position": {
+                "x": 133.8132350039444,
+                "y": -384.3623876665867
+            },
+            "selected": false,
+            "sourcePosition": "right",
+            "targetPosition": "left",
+            "type": "retrievalNode"
+        },
+        {
+            "data": {
+                "form": {
+                    "cite": false,
+                    "frequencyPenaltyEnabled": true,
+                    "frequency_penalty": 0.7,
+                    "llm_id": "llama3.2@Ollama",
+                    "maxTokensEnabled": false,
+                    "max_tokens": 512,
+                    "message_history_window_size": 5,
+                    "parameter": "Precise",
+                    "parameters": [],
+                    "presencePenaltyEnabled": true,
+                    "presence_penalty": 0.4,
+                    "prompt": "Você é um assistente de IA projetado para ajudar estudantes da Universidade de Brasília a encontrar turmas. Sua tarefa é identificar e recuperar as turmas mais relevantes e *únicas* da base de conhecimento, com base no conteúdo da disciplina que o usuário está procurando. Desconsidere quaisquer palavras, frases ou elementos conversacionais na entrada do usuário que não contribuam para a identificação do tema da disciplina. Sua busca deve ser altamente precisa, utilizando o termo ou a frase extraída para encontrar correspondências relevantes em todos os detalhes da turma, incluindo a ementa, o nome da disciplina e a unidade responsavel. Retorne os detalhes completos das turmas mais relevantes e únicas, incluindo:- Disciplina: [Nome da Disciplina]- Unidade responsável: [Unidade responsável] - Ementa: [Ementa da disciplina] Apresente os resultados como uma lista ranqueada.  Here is the knowledge base: { {Retrieval:FortyMoonsPick}}  The above is the knowledge base.",
+                    "temperature": 0.1,
+                    "temperatureEnabled": true,
+                    "topPEnabled": true,
+                    "top_p": 0.3
+                },
+                "label": "Generate",
+                "name": "Generate_0"
+            },
+            "dragging": false,
+            "id": "Generate:RareGhostsCry",
+            "measured": {
+                "height": 108,
+                "width": 200
+            },
+            "position": {
+                "x": 462.5412900158525,
+                "y": -384.7229616273899
+            },
+            "selected": false,
+            "sourcePosition": "right",
+            "targetPosition": "left",
+            "type": "generateNode"
+        },
+        {
+            "data": {
+                "form": {},
+                "label": "Answer",
+                "name": "Interact_1"
+            },
+            "dragging": false,
+            "id": "Answer:MoodyTownsJoin",
+            "measured": {
+                "height": 46,
+                "width": 200
+            },
+            "position": {
+                "x": 787.550613208286,
+                "y": -354.7229616273899
+            },
+            "selected": true,
+            "sourcePosition": "right",
+            "targetPosition": "left",
+            "type": "logicNode"
+        }
+    ],
+    "edges": [
+        {
+            "id": "xy-edge__Answer:BetterJeansHuntb-Retrieval:ItchyDogsBetc",
+            "markerEnd": "logo",
+            "source": "Answer:BetterJeansHunt",
+            "sourceHandle": "b",
+            "style": {
+                "stroke": "rgb(202 197 245)",
+                "strokeWidth": 2
+            },
+            "target": "Retrieval:ItchyDogsBet",
+            "targetHandle": "c",
+            "type": "buttonEdge",
+            "zIndex": 1001
+        },
+        {
+            "id": "xy-edge__Retrieval:ItchyDogsBetb-Generate:StrongDollsStandc",
+            "markerEnd": "logo",
+            "source": "Retrieval:ItchyDogsBet",
+            "sourceHandle": "b",
+            "style": {
+                "stroke": "rgb(202 197 245)",
+                "strokeWidth": 2
+            },
+            "target": "Generate:StrongDollsStand",
+            "targetHandle": "c",
+            "type": "buttonEdge",
+            "zIndex": 1001
+        },
+        {
+            "id": "xy-edge__Generate:StrongDollsStandb-Answer:AngryPapersFailc",
+            "markerEnd": "logo",
+            "source": "Generate:StrongDollsStand",
+            "sourceHandle": "b",
+            "style": {
+                "stroke": "rgb(202 197 245)",
+                "strokeWidth": 2
+            },
+            "target": "Answer:AngryPapersFail",
+            "targetHandle": "c",
+            "type": "buttonEdge",
+            "zIndex": 1001
+        },
+        {
+            "id": "xy-edge__Retrieval:FortyMoonsPickb-Generate:RareGhostsCryc",
+            "markerEnd": "logo",
+            "source": "Retrieval:FortyMoonsPick",
+            "sourceHandle": "b",
+            "style": {
+                "stroke": "rgb(202 197 245)",
+                "strokeWidth": 2
+            },
+            "target": "Generate:RareGhostsCry",
+            "targetHandle": "c",
+            "type": "buttonEdge",
+            "zIndex": 1001
+        },
+        {
+            "id": "xy-edge__Generate:RareGhostsCryb-Answer:MoodyTownsJoinc",
+            "markerEnd": "logo",
+            "source": "Generate:RareGhostsCry",
+            "sourceHandle": "b",
+            "style": {
+                "stroke": "rgb(202 197 245)",
+                "strokeWidth": 2
+            },
+            "target": "Answer:MoodyTownsJoin",
+            "targetHandle": "c",
+            "type": "buttonEdge",
+            "zIndex": 1001
+        },
+        {
+            "id": "xy-edge__begin-Retrieval:FortyMoonsPickc",
+            "markerEnd": "logo",
+            "source": "begin",
+            "style": {
+                "stroke": "rgb(202 197 245)",
+                "strokeWidth": 2
+            },
+            "target": "Retrieval:FortyMoonsPick",
+            "targetHandle": "c",
+            "type": "buttonEdge",
+            "zIndex": 1001
+        }
+    ]
+}
