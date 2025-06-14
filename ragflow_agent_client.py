@@ -1,4 +1,4 @@
-# ragflow_agent_client.py
+# ragflow_agent_client.py (VERSÃO FINAL E FUNCIONAL)
 import requests
 import json
 from config import RAGFLOW_API_KEY, RAGFLOW_BASE_URL, RAGFLOW_AGENT_ID
@@ -15,23 +15,25 @@ class RagflowAgentClient:
         self.endpoint_url = f"{self.base_url}/api/v1/agents_openai/{self.agent_id}/chat/completions"
 
     def get_completion(self, user_query: str):
+        # Monta o payload para o RAGflow
         payload = {
-            "model": "gpt-3.5-turbo",
+            "model": "gpt-3.5-turbo", # Este campo é ignorado pelo RAGflow, mas necessário no formato
             "messages": [
                 {"role": "user", "content": user_query}
             ],
+            # --- CORREÇÃO PRINCIPAL: DESATIVANDO O STREAMING PARA EVITAR O BUG DO SERVIDOR ---
             "stream": False
         }
 
         try:
+            # Aumentamos o timeout para dar tempo ao LLM de processar
             response = requests.post(self.endpoint_url, headers=self.headers, json=payload, timeout=180)
-            response.raise_for_status()
+            
+            response.raise_for_status() # Irá gerar um erro para status 4xx ou 5xx
+
             json_data = response.json()
             
-            # Checa por erros de autenticação no corpo da resposta
-            if json_data.get("code") == 109 and "invalid" in json_data.get("message", ""):
-                 return f"ERRO DE AUTENTICAÇÃO: {json_data['message']}"
-
+            # Extrai o conteúdo da resposta completa no formato OpenAI não-streaming
             final_answer = json_data.get("choices", [{}])[0].get("message", {}).get("content", "")
             
             if final_answer:
