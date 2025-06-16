@@ -2,6 +2,7 @@ import streamlit as st
 from ragflow_agent_client import RagflowClient
 import unicodedata
 from visualizaJson import processar_json_disciplinas
+from visualizaJsonMateriasAssociadas import gerar_texto_ranking
 #from agent_api.config import AGENT_EXPLANATOR_ID
 
 def remover_acentos_nativo(texto):
@@ -43,18 +44,22 @@ if st.button("Analisar"):
         with st.spinner("Analisando..."):
             try:
                 client = RagflowClient()
+                #conteudos_associados = client.gerar_palavrasChaves(materia)
                 session_id = client.start_session(materia)
+                print(f'Session ID ={session_id}')
                 result = client.analyze_materia(materia, session_id)
+                print(f'RESULT = {result}')
 
                 if result.get("code") == 0:
                     #resposta = result["data"]["answer"]
-                    resposta = processar_json_disciplinas(result)
+                    resposta = gerar_texto_ranking(result)
                     #print(f'RESULT FORMATADO : {resposta}\n')
                     st.session_state.resposta_agente = resposta
                     print(f'Sessio State Resposta:  {st.session_state.resposta_agente}')
                     #st.session_state.detalhes_agente = None  # Limpa caso nova análise
                     #st.session_state.mostrar_detalhes = "FAKE" in resposta.upper()
 
+                    print(f'RESPOTA = {resposta}')
                     st.success("Resposta do agente:")
                     st.write(resposta)
                 else:

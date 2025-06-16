@@ -10,7 +10,9 @@ RAGFLOW_API_KEY = "ragflow-MyMDYxOTNjNDhhNjExZjBhYWEzZmE3Nj"
 RAGFLOW_BASE_URL = "http://localhost"
 
 # O ID do seu agente novo e correto
-RAGFLOW_AGENT_ID = "10b20f0248a611f089a9fa761c0fa70c"
+#RAGFLOW_AGENT_ID = "10b20f0248a611f089a9fa761c0fa70c"
+
+RAGFLOW_AGENT_ID = "71261d504a0011f091a40a080243f332"
 
 # Verificação final para garantir que não estão vazios
 if not RAGFLOW_API_KEY or not RAGFLOW_BASE_URL or not RAGFLOW_AGENT_ID:
